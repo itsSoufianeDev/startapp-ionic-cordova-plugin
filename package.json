@@ -1,0 +1,25 @@
+{
+  "name": "cordova-plugin-startappads",
+  "version": "0.0.1",
+  "description": "StartApp ad plugin",
+  "cordova": {
+    "id": "cordova-plugin-startappads",
+    "platforms": [
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/M5Owner/startapp-ionic-cordova-plugin.git"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "Soufiane Mgani",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/M5Owner/startapp-ionic-cordova-plugin/issues"
+  },
+  "homepage": "https://github.com/M5Owner/startapp-ionic-cordova-plugin#readme"
+}
