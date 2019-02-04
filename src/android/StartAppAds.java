@@ -99,7 +99,7 @@ public class StartAppAds extends CordovaPlugin {
                 callback.error("Initialization failed: " + e);
             }
         }else{
-            Log.e("MainActivity", "Init invalid inputs: " + e);
+            Log.e("MainActivity", "Init invalid inputs: ");
             callback.error("No arguemnts supplied");
         }
     }
