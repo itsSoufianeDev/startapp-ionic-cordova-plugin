@@ -7,7 +7,7 @@ function Startapp () {}
 Initialize SDK
 **/
 Startapp.prototype.init = (args, success, error) => {
-	exec(success, error, 'init', [args]);
+	exec(success, error,'StartAppAds', 'init', [args]);
 }
 
 
@@ -15,7 +15,7 @@ Startapp.prototype.init = (args, success, error) => {
 Set User Consent: GDRP for EU Users
 **/
 Startapp.prototype.setConsent = (args, success, error) => {
-	exec(success, error, 'setConsent', [args]);
+	exec(success, error,'StartAppAds', 'setConsent', [args]);
 }
 
 
@@ -23,7 +23,7 @@ Startapp.prototype.setConsent = (args, success, error) => {
 Load an Interstitial Ad
 **/
 Startapp.prototype.loadInterstitial = (success, error) => {
-	exec(success, error, 'loadInterstitial', []);
+	exec(success, error,'StartAppAds', 'loadInterstitial', []);
 }
 
 
@@ -31,7 +31,7 @@ Startapp.prototype.loadInterstitial = (success, error) => {
 Load a Rewarded Video Ad
 **/
 Startapp.prototype.loadRewardedVideo = (success, error) => {
-	exec(success, error, 'loadRewardedVideo', []);
+	exec(success, error,'StartAppAds', 'loadRewardedVideo', []);
 }
 
 /*var StartAppAds = new Startapp();
@@ -43,6 +43,7 @@ Startapp.install = function () {
   }
 
   window.plugins.startapp = new Startapp();
+  console.log('Startapp plugin installed');
   return window.plugins.startapp;
 };
 
