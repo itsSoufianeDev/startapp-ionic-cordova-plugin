@@ -27,9 +27,9 @@ import org.json.JSONObject;
  */
 public class StartAppAds extends CordovaPlugin {
 
-    Context context = this.cordova.getActivity().getApplicationContext();
+    //Context context = this;
     private static final String SHARED_PREFS_GDPR_SHOWN = "gdpr_dialog_was_shown";
-    private StartAppAd startAppAd = new StartAppAd(context);
+    private StartAppAd startAppAd = new StartAppAd(this);
     SharedPreferences SharedPref;
 
     @Override
@@ -66,12 +66,12 @@ public class StartAppAds extends CordovaPlugin {
     private void setConsent(Boolean consented, CallbackContext callback){
         if(consented != null){
             try{
-                StartAppSDK.setUserConsent(this.context,
+                StartAppSDK.setUserConsent(this,
                         "pas",
                         System.currentTimeMillis(),
                         consented);
 
-                SharedPref = context.getSharedPreferences("", Context.MODE_PRIVATE);
+                SharedPref = this.cordova.getActivity().getApplicationContext().getSharedPreferences("", Context.MODE_PRIVATE);
                 SharedPref.edit().putBoolean(SHARED_PREFS_GDPR_SHOWN, consented).commit();
 
                 callback.success(1);
