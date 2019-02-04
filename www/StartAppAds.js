@@ -35,11 +35,11 @@ var Startapp = {
 
 }
 
-window.plugins.startapp = Startapp;
+//window.plugins.startapp = Startapp;
 
 
-/*var StartAppAds = new Startapp();
-module.exports = StartAppAds;*/
+var StartAppAds = new Startapp();
+module.exports = StartAppAds;
 /*
 Startapp.install = function () {
   if (!window.plugins) {
