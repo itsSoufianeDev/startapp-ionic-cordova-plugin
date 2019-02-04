@@ -29,7 +29,7 @@ public class StartAppAds extends CordovaPlugin {
 
     
     private static final String SHARED_PREFS_GDPR_SHOWN = "gdpr_dialog_was_shown";
-    private StartAppAd startAppAd = new StartAppAd(this.context);
+    private StartAppAd startAppAd = new StartAppAd(cordova.getActivity().getApplicationContext());
     SharedPreferences SharedPref;
 
     @Override
@@ -72,7 +72,7 @@ public class StartAppAds extends CordovaPlugin {
                 String appId = args.getJSONObject(0).getString("appId");
                 boolean returnAds = args.getJSONObject(0).getBoolean("returnAds");
                 // StartApp init
-                StartAppSDK.init(this.context, appId, returnAds);
+                StartAppSDK.init(cthis, appId, returnAds);
                 Log.e("MainActivity", "Init succeeded");
                 callback.success(1);
             }catch(Exception e){
