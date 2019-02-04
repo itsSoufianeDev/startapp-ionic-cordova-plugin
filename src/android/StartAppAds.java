@@ -1,11 +1,14 @@
 package cordova.plugin.startappads;
 
+import org.apache.cordova.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.util.Log;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CallbackContext;
 
 import com.startapp.android.publish.ads.nativead.NativeAdDetails;
 import com.startapp.android.publish.ads.nativead.NativeAdPreferences;
@@ -18,16 +21,12 @@ import com.startapp.android.publish.adsCommon.VideoListener;
 import com.startapp.android.publish.adsCommon.adListeners.AdDisplayListener;
 import com.startapp.android.publish.adsCommon.adListeners.AdEventListener;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * This class echoes a string called from JavaScript.
  */
 public class StartAppAds extends CordovaPlugin {
 
-    Context context = IS_AT_LEAST_LOLLIPOP ? cordova.getActivity().getWindow().getContext() : cordova.getActivity().getApplicationContext();
     
     private static final String SHARED_PREFS_GDPR_SHOWN = "gdpr_dialog_was_shown";
     private StartAppAd startAppAd = new StartAppAd(this.context);
@@ -36,55 +35,38 @@ public class StartAppAds extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
+        Context context = this.cordova.getActivity().getApplicationContext();
+        Log.e("MainActivity", context);
+
         if (action.equals("init")) {
             Log.e("MainActivity", "Init called");
-            this.init(args, callbackContext);
+            this.init(context, args, callbackContext);
             return true;
         }
 
         if (action.equals("setConsent")) {
             Log.e("MainActivity", "setConsent Called");
             Boolean consentValue = args.getBoolean(0);
-            this.setConsent(consentValue, callbackContext);
+            this.setConsent(context, consentValue, callbackContext);
             return true;
         }
 
         if (action.equals("loadInterstitial")) {
             Log.e("MainActivity", "loadInterstitial called");
-            this.loadInterstitial(callbackContext);
+            this.loadInterstitial(context, callbackContext);
             return true;
         }
 
         if (action.equals("loadRewardedVideo")) {
             Log.e("MainActivity", "loadRewardedVideo called");
-            this.loadRewardedVideo(callbackContext);
+            this.loadRewardedVideo(context, callbackContext);
             return true;
         }
 
         return false;
     }
 
-    private void setConsent(Boolean consented, CallbackContext callback){
-        if(consented != null){
-            try{
-                StartAppSDK.setUserConsent((Context) this.context,
-                        "pas",
-                        System.currentTimeMillis(),
-                        consented);
-
-                getPreferences(Context.MODE_PRIVATE).edit().putBoolean(SHARED_PREFS_GDPR_SHOWN, consented).commit();
-                callback.success(1);
-            }catch(Exception e){
-                Log.e("MainActivity", "SetConsent err: " + e);
-                callback.error("Something went wrong: " + e);
-            }
-        }else{
-            Log.e("MainActivity", "SetConsent invalid value");
-            callback.error("Invalid consent value");
-        }
-    }
-
-    private void init(JSONArray args, CallbackContext callback){
+    private void init(Context cthis, JSONArray args, CallbackContext callback){
         if(args != null){
             try{
                 String appId = args.getJSONObject(0).getString("appId");
@@ -103,7 +85,28 @@ public class StartAppAds extends CordovaPlugin {
         }
     }
 
-    private void loadInterstitial(CallbackContext callback){
+    private void setConsent(Context cthis, Boolean consented, CallbackContext callback){
+        if(consented != null){
+            try{
+                StartAppSDK.setUserConsent((Context) cthis,
+                        "pas",
+                        System.currentTimeMillis(),
+                        consented);
+
+                getPreferences(Context.MODE_PRIVATE).edit().putBoolean(SHARED_PREFS_GDPR_SHOWN, consented).commit();
+                callback.success(1);
+            }catch(Exception e){
+                Log.e("MainActivity", "SetConsent err: " + e);
+                callback.error("Something went wrong: " + e);
+            }
+        }else{
+            Log.e("MainActivity", "SetConsent invalid value");
+            callback.error("Invalid consent value");
+        }
+    }
+
+
+    private void loadInterstitial(Context cthis, CallbackContext callback){
         try{
             this.startAppAd.showAd();
             Log.e("MainActivity", "loadInterstitial success");
@@ -114,7 +117,7 @@ public class StartAppAds extends CordovaPlugin {
         }
     }
 
-    private void loadRewardedVideo(CallbackContext callback){
+    private void loadRewardedVideo(Context cthis, CallbackContext callback){
         final CallbackContext c = callback;
         try{
             final StartAppAd rewardedVideo = this.startAppAd;
