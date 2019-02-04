@@ -36,7 +36,6 @@ public class StartAppAds extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
         Context context = this.cordova.getActivity().getApplicationContext();
-        Log.e("MainActivity", context);
 
         if (action.equals("init")) {
             Log.e("MainActivity", "Init called");
@@ -93,7 +92,9 @@ public class StartAppAds extends CordovaPlugin {
                         System.currentTimeMillis(),
                         consented);
 
-                getPreferences(Context.MODE_PRIVATE).edit().putBoolean(SHARED_PREFS_GDPR_SHOWN, consented).commit();
+                //getPreferences(Context.MODE_PRIVATE).edit().putBoolean(SHARED_PREFS_GDPR_SHOWN, consented).commit();
+                SharedPref = context.getSharedPreferences("", Context.MODE_PRIVATE);
+                SharedPref.edit().putBoolean(SHARED_PREFS_GDPR_SHOWN, consented).commit();
                 callback.success(1);
             }catch(Exception e){
                 Log.e("MainActivity", "SetConsent err: " + e);
