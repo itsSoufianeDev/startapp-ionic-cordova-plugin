@@ -1,54 +1,49 @@
 var exec = require('cordova/exec');
 
 
-var Startapp = {
-	/**
-	Initialize SDK
-	**/
-	init: function(args, success, error){
-		exec(success, error,"StartAppAds", "init", [args]);
-	},
+function Startapp () {}
 
-
-	/**
-	Set User Consent: GDRP for EU Users
-	**/
-	setConsent: function(args, success, error){
-		exec(success, error,"StartAppAds", "setConsent", [args]);
-	},
-
-
-	/**
-	Load an Interstitial Ad
-	**/
-	loadInterstitial: function(success, error){
-		exec(success, error,"StartAppAds", "loadInterstitial", []);
-	},
-
-
-	/**
-	Load a Rewarded Video Ad
-	**/
-	loadRewardedVideo: function(success, error){
-		exec(success, error,"StartAppAds", "loadRewardedVideo", []);
-	}
-
+/**
+Initialize SDK
+**/
+Startapp.prototype.init = function(args, success, error){
+	exec(success, error,'StartAppAds', 'init', [args]);
 }
 
-//window.plugins.startapp = Startapp;
+
+/**
+Set User Consent: GDRP for EU Users
+**/
+Startapp.prototype.setConsent = function(args, success, error){
+	exec(success, error,'StartAppAds', 'setConsent', [args]);
+}
 
 
-var StartAppAds = new Startapp();
-module.exports = StartAppAds;
-/*
-Startapp.install = function () {
-  if (!window.plugins) {
-    window.plugins = {};
-  }
+/**
+Load an Interstitial Ad
+**/
+Startapp.prototype.loadInterstitial = function(success, error){
+	exec(success, error,'StartAppAds', 'loadInterstitial', []);
+}
 
-  window.plugins.startapp = new Startapp();
-  console.log('Startapp plugin installed');
-  return window.plugins.startapp;
-};
 
-cordova.addConstructor(Startapp.install);*/
+/**
+Load a Rewarded Video Ad
+**/
+Startapp.prototype.loadRewardedVideo = function(success, error){
+	exec(success, error,'StartAppAds', 'loadRewardedVideo', []);
+}
+
+/*var StartAppAds = new Startapp();
+module.exports = StartAppAds;*/
+
+if (!window.plugins) {
+  window.plugins = {};
+}
+if (!window.plugins.startappads) {
+  window.plugins.startappads = new Startapp();
+}
+
+if (module.exports) {
+  module.exports = Startapp;
+}
