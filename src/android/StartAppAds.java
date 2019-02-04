@@ -26,10 +26,9 @@ import org.json.JSONObject;
  * This class echoes a string called from JavaScript.
  */
 public class StartAppAds extends CordovaPlugin {
-
-    Context context = this.cordova.getActivity().getApplicationContext();
+    
     private static final String SHARED_PREFS_GDPR_SHOWN = "gdpr_dialog_was_shown";
-    private StartAppAd startAppAd = new StartAppAd(this.cordova.getActivity().getApplicationContext());
+    private StartAppAd startAppAd = new StartAppAd(Context context);
     SharedPreferences SharedPref;
 
     @Override
@@ -66,7 +65,7 @@ public class StartAppAds extends CordovaPlugin {
     private void setConsent(Boolean consented, CallbackContext callback){
         if(consented != null){
             try{
-                StartAppSDK.setUserConsent(this.context,
+                StartAppSDK.setUserConsent(Context context,
                         "pas",
                         System.currentTimeMillis(),
                         consented);
@@ -118,7 +117,7 @@ public class StartAppAds extends CordovaPlugin {
     private void loadRewardedVideo(CallbackContext callback){
         final CallbackContext c = callback;
         try{
-            final StartAppAd rewardedVideo = new StartAppAd(this.context);
+            final StartAppAd rewardedVideo = new StartAppAd(Context context);
             rewardedVideo.setVideoListener(new VideoListener(){
 
                 @Override
