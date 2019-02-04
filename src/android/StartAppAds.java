@@ -26,9 +26,11 @@ import org.json.JSONObject;
  * This class echoes a string called from JavaScript.
  */
 public class StartAppAds extends CordovaPlugin {
+
+    Context context = IS_AT_LEAST_LOLLIPOP ? cordova.getActivity().getWindow().getContext() : cordova.getActivity().getApplicationContext();
     
     private static final String SHARED_PREFS_GDPR_SHOWN = "gdpr_dialog_was_shown";
-    private StartAppAd startAppAd = new StartAppAd(this.cordova.getActivity().getApplicationContext());
+    private StartAppAd startAppAd = new StartAppAd(this.context);
     SharedPreferences SharedPref;
 
     @Override
@@ -65,7 +67,7 @@ public class StartAppAds extends CordovaPlugin {
     private void setConsent(Boolean consented, CallbackContext callback){
         if(consented != null){
             try{
-                StartAppSDK.setUserConsent((Context) this.cordova.getActivity().getApplicationContext(),
+                StartAppSDK.setUserConsent((Context) this.context,
                         "pas",
                         System.currentTimeMillis(),
                         consented);
@@ -88,7 +90,7 @@ public class StartAppAds extends CordovaPlugin {
                 String appId = args.getJSONObject(0).getString("appId");
                 boolean returnAds = args.getJSONObject(0).getBoolean("returnAds");
                 // StartApp init
-                StartAppSDK.init(this.cordova.getActivity().getApplicationContext(), appId, returnAds);
+                StartAppSDK.init(this.context, appId, returnAds);
                 Log.e("MainActivity", "Init succeeded");
                 callback.success(1);
             }catch(Exception e){
