@@ -34,5 +34,16 @@ Startapp.prototype.loadRewardedVideo = (success, error) => {
 	exec(success, error, 'loadRewardedVideo', []);
 }
 
-var StartAppAds = new Startapp();
-module.exports = StartAppAds;
+/*var StartAppAds = new Startapp();
+module.exports = StartAppAds;*/
+
+Startapp.install = function () {
+  if (!window.plugins) {
+    window.plugins = {};
+  }
+
+  window.plugins.startapp = new Startapp();
+  return window.plugins.startapp;
+};
+
+cordova.addConstructor(Startapp.install);
