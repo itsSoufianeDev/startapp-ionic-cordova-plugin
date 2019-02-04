@@ -36,22 +36,26 @@ public class StartAppAds extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
         if (action.equals("init")) {
+            Log.e("MainActivity", "Init called");
             this.init(args, callbackContext);
             return true;
         }
 
         if (action.equals("setConsent")) {
+            Log.e("MainActivity", "setConsent Called");
             Boolean consentValue = args.getBoolean(0);
             this.setConsent(consentValue, callbackContext);
             return true;
         }
 
         if (action.equals("loadInterstitial")) {
+            Log.e("MainActivity", "loadInterstitial called");
             this.loadInterstitial(callbackContext);
             return true;
         }
 
         if (action.equals("loadRewardedVideo")) {
+            Log.e("MainActivity", "loadRewardedVideo called");
             this.loadRewardedVideo(callbackContext);
             return true;
         }
@@ -72,9 +76,11 @@ public class StartAppAds extends CordovaPlugin {
 
                 callback.success(1);
             }catch(Exception e){
+                Log.e("MainActivity", "SetConsent err: " + e);
                 callback.error("Something went wrong: " + e);
             }
         }else{
+            Log.e("MainActivity", "SetConsent invalid value");
             callback.error("Invalid consent value");
         }
     }
@@ -86,11 +92,14 @@ public class StartAppAds extends CordovaPlugin {
                 boolean returnAds = args.getJSONObject(0).getBoolean("returnAds");
                 // StartApp init
                 StartAppSDK.init(this.context, appId, returnAds);
+                Log.e("MainActivity", "Init succeeded");
                 callback.success(1);
             }catch(Exception e){
+                Log.e("MainActivity", "Init failed err: " + e);
                 callback.error("Initialization failed: " + e);
             }
         }else{
+            Log.e("MainActivity", "Init invalid inputs: " + e);
             callback.error("No arguemnts supplied");
         }
     }
@@ -98,8 +107,10 @@ public class StartAppAds extends CordovaPlugin {
     private void loadInterstitial(CallbackContext callback){
         try{
             startAppAd.showAd();
+            Log.e("MainActivity", "loadInterstitial success");
             callback.success(1);
         }catch(Exception e){
+            Log.e("MainActivity", "Interstitial err: " + e);
             callback.error("Failed to load Interstitial ad: " + e);
         }
     }
@@ -112,6 +123,7 @@ public class StartAppAds extends CordovaPlugin {
 
                 @Override
                 public void onVideoCompleted() {
+                    Log.e("MainActivity", "Give cookie");
                     c.success("REWARD");
                 }
             });
@@ -120,17 +132,19 @@ public class StartAppAds extends CordovaPlugin {
 
                 @Override
                 public void onReceiveAd(Ad arg0) {
-                    c.success("LOADED");
+                    Log.e("MainActivity", "Ad received");
                     rewardedVideo.showAd();
+                    c.success("LOADED");
                 }
 
                 @Override
                 public void onFailedToReceiveAd(Ad arg0) {
-                    c.success("FAILED");
                     Log.e("MainActivity", "Failed to load rewarded video with reason");
+                    c.success("FAILED");
                 }
             });
         }catch(Exception e){
+            Log.e("MainActivity", "Rewarded video err: " + e);
             c.success("FAILED TO LOAD REWARDED VIDEO: " + e);
         }
     }
