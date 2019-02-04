@@ -28,7 +28,7 @@ import org.json.JSONObject;
 public class StartAppAds extends CordovaPlugin {
     
     private static final String SHARED_PREFS_GDPR_SHOWN = "gdpr_dialog_was_shown";
-    private StartAppAd startAppAd = new StartAppAd();
+    private StartAppAd startAppAd = new StartAppAd(this.cordova.getActivity().getApplicationContext());
     SharedPreferences SharedPref;
 
     @Override
@@ -65,7 +65,7 @@ public class StartAppAds extends CordovaPlugin {
     private void setConsent(Boolean consented, CallbackContext callback){
         if(consented != null){
             try{
-                StartAppSDK.setUserConsent((Context) this,
+                StartAppSDK.setUserConsent((Context) this.cordova.getActivity().getApplicationContext(),
                         "pas",
                         System.currentTimeMillis(),
                         consented);
@@ -90,7 +90,7 @@ public class StartAppAds extends CordovaPlugin {
                 String appId = args.getJSONObject(0).getString("appId");
                 boolean returnAds = args.getJSONObject(0).getBoolean("returnAds");
                 // StartApp init
-                StartAppSDK.init(this.context, appId, returnAds);
+                StartAppSDK.init(this.cordova.getActivity().getApplicationContext(), appId, returnAds);
                 Log.e("MainActivity", "Init succeeded");
                 callback.success(1);
             }catch(Exception e){
@@ -105,7 +105,7 @@ public class StartAppAds extends CordovaPlugin {
 
     private void loadInterstitial(CallbackContext callback){
         try{
-            startAppAd.showAd();
+            this.startAppAd.showAd();
             Log.e("MainActivity", "loadInterstitial success");
             callback.success(1);
         }catch(Exception e){
@@ -117,7 +117,7 @@ public class StartAppAds extends CordovaPlugin {
     private void loadRewardedVideo(CallbackContext callback){
         final CallbackContext c = callback;
         try{
-            final StartAppAd rewardedVideo = new StartAppAd();
+            final StartAppAd rewardedVideo = this.startAppAd;
             rewardedVideo.setVideoListener(new VideoListener(){
 
                 @Override
