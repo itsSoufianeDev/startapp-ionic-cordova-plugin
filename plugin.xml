@@ -12,5 +12,6 @@
       </config-file>
       <config-file parent="/*" target="AndroidManifest.xml" />
       <source-file src="src/android/StartAppAds.java" target-dir="src/cordova/plugin/startappads/StartAppAds" />
+      <framework src="com.startapp:inapp-sdk:3.10.0"/>
    </platform>
 </plugin>
