@@ -93,7 +93,7 @@ public class StartAppAds extends CordovaPlugin {
                         consented);
 
                 //getPreferences(Context.MODE_PRIVATE).edit().putBoolean(SHARED_PREFS_GDPR_SHOWN, consented).commit();
-                SharedPref = context.getSharedPreferences("", Context.MODE_PRIVATE);
+                SharedPref = cthis.getSharedPreferences("", Context.MODE_PRIVATE);
                 SharedPref.edit().putBoolean(SHARED_PREFS_GDPR_SHOWN, consented).commit();
                 callback.success(1);
             }catch(Exception e){
