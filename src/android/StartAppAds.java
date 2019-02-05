@@ -29,13 +29,13 @@ public class StartAppAds extends CordovaPlugin {
 
     
     private static final String SHARED_PREFS_GDPR_SHOWN = "gdpr_dialog_was_shown";
-    private StartAppAd startAppAd = new StartAppAd(this.cordova.getActivity().getApplicationContext());
     SharedPreferences SharedPref;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
         Context context = this.cordova.getActivity().getApplicationContext();
+        StartAppAd startAppAd = new StartAppAd(context);
 
         if (action.equals("init")) {
             Log.e("MainActivity", "Init called");
@@ -52,13 +52,13 @@ public class StartAppAds extends CordovaPlugin {
 
         if (action.equals("loadInterstitial")) {
             Log.e("MainActivity", "loadInterstitial called");
-            this.loadInterstitial(context, callbackContext);
+            this.loadInterstitial(context, startAppAd, callbackContext);
             return true;
         }
 
         if (action.equals("loadRewardedVideo")) {
             Log.e("MainActivity", "loadRewardedVideo called");
-            this.loadRewardedVideo(context, callbackContext);
+            this.loadRewardedVideo(context, startAppAd, callbackContext);
             return true;
         }
 
@@ -107,9 +107,9 @@ public class StartAppAds extends CordovaPlugin {
     }
 
 
-    private void loadInterstitial(Context cthis, CallbackContext callback){
+    private void loadInterstitial(Context cthis, StartAppAd sta, CallbackContext callback){
         try{
-            this.startAppAd.showAd();
+            sta.showAd();
             Log.e("MainActivity", "loadInterstitial success");
             callback.success(1);
         }catch(Exception e){
@@ -118,10 +118,10 @@ public class StartAppAds extends CordovaPlugin {
         }
     }
 
-    private void loadRewardedVideo(Context cthis, CallbackContext callback){
+    private void loadRewardedVideo(Context cthis, StartAppAd sta, CallbackContext callback){
         final CallbackContext c = callback;
         try{
-            final StartAppAd rewardedVideo = this.startAppAd;
+            final StartAppAd rewardedVideo = sta;
             rewardedVideo.setVideoListener(new VideoListener(){
 
                 @Override
