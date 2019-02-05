@@ -9,6 +9,7 @@ import android.util.Log;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import me.dig4rewards.cashapp.MainActivity;
 
 import com.startapp.android.publish.ads.nativead.NativeAdDetails;
 import com.startapp.android.publish.ads.nativead.NativeAdPreferences;
@@ -30,6 +31,7 @@ public class StartAppAds extends CordovaPlugin {
     
     private static final String SHARED_PREFS_GDPR_SHOWN = "gdpr_dialog_was_shown";
     SharedPreferences SharedPref;
+    MainActivity ma = (MainActivity) cordova.getActivity();
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -128,7 +130,8 @@ public class StartAppAds extends CordovaPlugin {
                 public void onVideoCompleted() {
                     Log.e("MainActivity", "Give cookie");
                     //c.success();
-                    super.appView.loadUrl("javascript:cordova.fireDocumentEvent('REWARD',{})");
+                    //super.appView.loadUrl("javascript:cordova.fireDocumentEvent('REWARD',{})");
+                    this.ma.triggerEvent("REWARD");
                 }
             });
 
@@ -139,7 +142,8 @@ public class StartAppAds extends CordovaPlugin {
                     Log.e("MainActivity", "Ad received");
                     rewardedVideo.showAd();
                     //this.forwardEventToJS("LOADED");
-                    super.appView.loadUrl("javascript:cordova.fireDocumentEvent('LOADED',{})");
+                    //super.appView.loadUrl("javascript:cordova.fireDocumentEvent('LOADED',{})");
+                    this.ma.triggerEvent("LOADED");
                     //c.success();
                 }
 
@@ -147,7 +151,7 @@ public class StartAppAds extends CordovaPlugin {
                 public void onFailedToReceiveAd(Ad arg0) {
                     Log.e("MainActivity", "Failed to load rewarded video with reason");
                     //this.forwardEventToJS("FAILED");
-                    super.appView.loadUrl("javascript:cordova.fireDocumentEvent('FAILED',{})");
+                    this.ma.triggerEvent("FAILED");
                     //c.success("FAILED");
                 }
             });
@@ -155,5 +159,9 @@ public class StartAppAds extends CordovaPlugin {
             Log.e("MainActivity", "Rewarded video err: " + e);
             c.error("FAILED TO LOAD REWARDED VIDEO: " + e);
         }
+    }
+
+    public void triggerEvent(String e) {
+        super.loadUrl("javascript:cordova.fireDocumentEvent('"+e+"',{})");
     }
 }
