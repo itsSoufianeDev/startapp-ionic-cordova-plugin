@@ -128,7 +128,7 @@ public class StartAppAds extends CordovaPlugin {
                 public void onVideoCompleted() {
                     Log.e("MainActivity", "Give cookie");
                     //c.success();
-                    this.forwardEventToJS("REWARD");
+                    this.appView.loadUrl("javascript:cordova.fireDocumentEvent('REWARD',{})");
                 }
             });
 
@@ -138,14 +138,16 @@ public class StartAppAds extends CordovaPlugin {
                 public void onReceiveAd(Ad arg0) {
                     Log.e("MainActivity", "Ad received");
                     rewardedVideo.showAd();
-                    this.forwardEventToJS("LOADED");
+                    //this.forwardEventToJS("LOADED");
+                    this.appView.loadUrl("javascript:cordova.fireDocumentEvent('LOADED',{})");
                     //c.success();
                 }
 
                 @Override
                 public void onFailedToReceiveAd(Ad arg0) {
                     Log.e("MainActivity", "Failed to load rewarded video with reason");
-                    this.forwardEventToJS("FAILED");
+                    //this.forwardEventToJS("FAILED");
+                    this.appView.loadUrl("javascript:cordova.fireDocumentEvent('FAILED',{})");
                     //c.success("FAILED");
                 }
             });
@@ -153,10 +155,5 @@ public class StartAppAds extends CordovaPlugin {
             Log.e("MainActivity", "Rewarded video err: " + e);
             c.error("FAILED TO LOAD REWARDED VIDEO: " + e);
         }
-    }
-
-    private void forwardEventToJS(String event){
-        String eventStructure = "javascript:cordova.fireDocumentEvent('" + event + "',{})";
-        appView.loadUrl(eventStructure);
     }
 }
