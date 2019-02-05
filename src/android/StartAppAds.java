@@ -31,7 +31,6 @@ public class StartAppAds extends CordovaPlugin {
     
     private static final String SHARED_PREFS_GDPR_SHOWN = "gdpr_dialog_was_shown";
     SharedPreferences SharedPref;
-    MainActivity ma = (MainActivity) cordova.getActivity();
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -122,6 +121,7 @@ public class StartAppAds extends CordovaPlugin {
 
     private void loadRewardedVideo(Context cthis, StartAppAd sta, CallbackContext callback){
         final CallbackContext c = callback;
+        MainActivity ma = (MainActivity) cordova.getActivity();
         try{
             final StartAppAd rewardedVideo = sta;
             rewardedVideo.setVideoListener(new VideoListener(){
@@ -131,7 +131,7 @@ public class StartAppAds extends CordovaPlugin {
                     Log.e("MainActivity", "Give cookie");
                     //c.success();
                     //super.appView.loadUrl("javascript:cordova.fireDocumentEvent('REWARD',{})");
-                    this.ma.triggerEvent("REWARD");
+                    ma.triggerEvent("REWARD");
                 }
             });
 
@@ -143,7 +143,7 @@ public class StartAppAds extends CordovaPlugin {
                     rewardedVideo.showAd();
                     //this.forwardEventToJS("LOADED");
                     //super.appView.loadUrl("javascript:cordova.fireDocumentEvent('LOADED',{})");
-                    this.ma.triggerEvent("LOADED");
+                    ma.triggerEvent("LOADED");
                     //c.success();
                 }
 
@@ -151,7 +151,7 @@ public class StartAppAds extends CordovaPlugin {
                 public void onFailedToReceiveAd(Ad arg0) {
                     Log.e("MainActivity", "Failed to load rewarded video with reason");
                     //this.forwardEventToJS("FAILED");
-                    this.ma.triggerEvent("FAILED");
+                    ma.triggerEvent("FAILED");
                     //c.success("FAILED");
                 }
             });
