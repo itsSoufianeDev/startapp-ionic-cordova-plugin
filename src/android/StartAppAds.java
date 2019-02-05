@@ -130,7 +130,7 @@ public class StartAppAds extends CordovaPlugin {
                     //c.success();
                     //super.appView.loadUrl("javascript:cordova.fireDocumentEvent('REWARD',{})");
                     //ma.triggerEvent("REWARD");
-                    this.cordova.getActivity().runOnUiThread(new Runnable() {
+                    cordova.getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             webView.loadUrl("javascript:cordova.fireDocumentEvent('REWARD',{})");
                         }
@@ -147,7 +147,7 @@ public class StartAppAds extends CordovaPlugin {
                     //this.forwardEventToJS("LOADED");
                     //super.appView.loadUrl("javascript:cordova.fireDocumentEvent('LOADED',{})");
                     //ma.triggerEvent("LOADED");
-                    this.cordova.getActivity().runOnUiThread(new Runnable() {
+                    cordova.getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             webView.loadUrl("javascript:cordova.fireDocumentEvent('LOADED',{})");
                         }
@@ -160,7 +160,7 @@ public class StartAppAds extends CordovaPlugin {
                     Log.e("MainActivity", "Failed to load rewarded video with reason");
                     //this.forwardEventToJS("FAILED");
                     //ma.triggerEvent("FAILED");
-                    this.cordova.getActivity().runOnUiThread(new Runnable() {
+                    cordova.getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             webView.loadUrl("javascript:cordova.fireDocumentEvent('FAILED',{})");
                         }
