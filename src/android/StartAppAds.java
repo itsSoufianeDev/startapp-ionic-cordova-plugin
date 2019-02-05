@@ -119,7 +119,6 @@ public class StartAppAds extends CordovaPlugin {
 
     private void loadRewardedVideo(Context cthis, StartAppAd sta, CallbackContext callback){
         final CallbackContext c = callback;
-        MainActivity ma = (MainActivity) cordova.getActivity();
         try{
             final StartAppAd rewardedVideo = sta;
             rewardedVideo.setVideoListener(new VideoListener(){
