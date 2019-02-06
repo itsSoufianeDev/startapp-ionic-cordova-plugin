@@ -186,10 +186,4 @@ public class StartAppAds extends CordovaPlugin {
         if(this.saAd != null) this.saAd.onResume();
         super.onResume(multitasking);
     }
-
-    @Override
-    public void onBackPressed() {
-        if(this.saAd != null) this.saAd.onBackPressed();
-        super.onBackPressed();
-    }
 }
