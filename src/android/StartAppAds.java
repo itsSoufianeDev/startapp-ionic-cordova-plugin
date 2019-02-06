@@ -29,48 +29,50 @@ public class StartAppAds extends CordovaPlugin {
     
     private static final String SHARED_PREFS_GDPR_SHOWN = "gdpr_dialog_was_shown";
     SharedPreferences SharedPref;
+    StartAppAd saAd = null;
+    Context context = null;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
-        Context context = this.cordova.getActivity().getApplicationContext();
-        StartAppAd startAppAd = new StartAppAd(context);
+        if(this.context == null) this.context = this.cordova.getActivity().getApplicationContext();
+        if(this.saAd == null) this.saAd = new StartAppAd(context);
 
         if (action.equals("init")) {
             Log.e("MainActivity", "Init called");
-            this.init(context, args, callbackContext);
+            this.init(args, callbackContext);
             return true;
         }
 
         if (action.equals("setConsent")) {
             Log.e("MainActivity", "setConsent Called");
             Boolean consentValue = args.getBoolean(0);
-            this.setConsent(context, consentValue, callbackContext);
+            this.setConsent(consentValue, callbackContext);
             return true;
         }
 
         if (action.equals("loadInterstitial")) {
             Log.e("MainActivity", "loadInterstitial called");
-            this.loadInterstitial(context, startAppAd, callbackContext);
+            this.loadInterstitial(callbackContext);
             return true;
         }
 
         if (action.equals("loadRewardedVideo")) {
             Log.e("MainActivity", "loadRewardedVideo called");
-            this.loadRewardedVideo(context, startAppAd, callbackContext);
+            this.loadRewardedVideo(callbackContext);
             return true;
         }
 
         return false;
     }
 
-    private void init(Context cthis, JSONArray args, CallbackContext callback){
+    private void init(JSONArray args, CallbackContext callback){
         if(args != null){
             try{
                 String appId = args.getJSONObject(0).getString("appId");
                 boolean returnAds = args.getJSONObject(0).getBoolean("returnAds");
                 // StartApp init
-                StartAppSDK.init(cthis, appId, returnAds);
+                StartAppSDK.init(this.context, appId, returnAds);
                 Log.e("MainActivity", "Init succeeded");
                 callback.success(1);
             }catch(Exception e){
@@ -83,16 +85,16 @@ public class StartAppAds extends CordovaPlugin {
         }
     }
 
-    private void setConsent(Context cthis, Boolean consented, CallbackContext callback){
+    private void setConsent(Boolean consented, CallbackContext callback){
         if(consented != null){
             try{
-                StartAppSDK.setUserConsent((Context) cthis,
+                StartAppSDK.setUserConsent((Context) this.context,
                         "pas",
                         System.currentTimeMillis(),
                         consented);
 
                 //getPreferences(Context.MODE_PRIVATE).edit().putBoolean(SHARED_PREFS_GDPR_SHOWN, consented).commit();
-                SharedPref = cthis.getSharedPreferences("", Context.MODE_PRIVATE);
+                SharedPref = this.context.getSharedPreferences("", Context.MODE_PRIVATE);
                 SharedPref.edit().putBoolean(SHARED_PREFS_GDPR_SHOWN, consented).commit();
                 callback.success(1);
             }catch(Exception e){
@@ -105,10 +107,9 @@ public class StartAppAds extends CordovaPlugin {
         }
     }
 
-
-    private void loadInterstitial(Context cthis, StartAppAd sta, CallbackContext callback){
+    private void loadInterstitial(CallbackContext callback){
         try{
-            sta.showAd();
+            this.saAd.showAd();
             Log.e("MainActivity", "loadInterstitial success");
             callback.success(1);
         }catch(Exception e){
@@ -117,10 +118,10 @@ public class StartAppAds extends CordovaPlugin {
         }
     }
 
-    private void loadRewardedVideo(Context cthis, StartAppAd sta, CallbackContext callback){
+    private void loadRewardedVideo(CallbackContext callback){
         final CallbackContext c = callback;
         try{
-            final StartAppAd rewardedVideo = sta;
+            final StartAppAd rewardedVideo = this.saAd;
             rewardedVideo.setVideoListener(new VideoListener(){
 
                 @Override
@@ -171,5 +172,24 @@ public class StartAppAds extends CordovaPlugin {
             Log.e("MainActivity", "Rewarded video err: " + e);
             c.error("FAILED TO LOAD REWARDED VIDEO: " + e);
         }
+    }
+
+    /*Necessary lifecycles*/
+    @Override
+    public void onPause() {
+        if(this.saAd != null) this.saAd.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        if(this.saAd != null) this.saAd.onResume();
+        super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(this.saAd != null) this.saAd.onBackPressed();
+        super.onBackPressed();
     }
 }
