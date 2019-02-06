@@ -178,13 +178,13 @@ public class StartAppAds extends CordovaPlugin {
     @Override
     public void onPause(boolean multitasking) {
         if(this.saAd != null) this.saAd.onPause();
-        super.onPause(boolean multitasking);
+        super.onPause(multitasking);
     }
 
     @Override
     public void onResume(boolean multitasking) {
         if(this.saAd != null) this.saAd.onResume();
-        super.onResume(boolean multitasking);
+        super.onResume(multitasking);
     }
 
     @Override
